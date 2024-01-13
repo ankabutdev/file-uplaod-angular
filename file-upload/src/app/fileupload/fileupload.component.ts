@@ -70,9 +70,9 @@ export class FileuploadComponent {
 
     let options = { headers: headers };
 
-    (this.http.post<Product>('http://localhost:5120/api/products', productData, options)).subscribe(response => {
-      console.log(response);
-    });
+    // (this.http.post<Product>('http://localhost:5120/api/products', productData, options)).subscribe(response => {
+    //   console.log(response);
+    // });
 
     try {
       const response = await this.http.post<Product>('http://localhost:5120/api/products', formData).toPromise();
