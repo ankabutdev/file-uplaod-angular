@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 export interface Product {
     CategoryId: number,
     Name: string,
-    ImagePaths: FormData,
+    ImagePaths: File[],
     Price: number,
     Description: string,
     CompanyId: number,

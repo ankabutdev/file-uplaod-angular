@@ -45,23 +45,23 @@ export class FileuploadComponent {
   }
 
   getFormData(object: any) {
-    let formData = new FormData();
+    let data = new FormData();
     for (let [key, val] of Object.entries(object)) {
-      formData.append(key, JSON.stringify(val));
+      if (key === 'ImagePaths') {
+        this.globalval.forEach(fileInput => {
+          data.append("ImagePaths", fileInput, fileInput.name);
+        });
+      } else
+        data.append(key, JSON.stringify(val));
     }
-    return formData;
+    return data;
   }
 
   uploadFiles() {
-    this.globalval.forEach(fileInput => {
-      this.formData.append("ImagePaths", fileInput, fileInput.name);
-    });
-
-    // this.formData.append('ImagePaths', this.globalval, this.globalval?.name)
     var productData: Product = {
       CategoryId: 1,
       Name: "aaaaaaaaaaa",
-      ImagePaths: this.formData,
+      ImagePaths: this.globalval,
       Price: 1,
       Description: "1",
       CompanyId: 1,
@@ -79,10 +79,9 @@ export class FileuploadComponent {
     };
 
     let res = this.getFormData(productData);
+
     // res.set("ImagePaths", this.formData);
     // this.formData = 
-
-
 
     const headers = new HttpHeaders({
       'Accept': 'application/json'
@@ -90,9 +89,10 @@ export class FileuploadComponent {
     let options = { headers: headers };
 
     try {
-      this.http.post('http://localhost:5120/api/products', this.formData, options).subscribe();
+      this.http.post('http://localhost:5120/api/products', res).subscribe();
       //console.log(response);
       console.log("success");
+      console.log();
     } catch (error) {
       console.error('Error:', error);
     }
