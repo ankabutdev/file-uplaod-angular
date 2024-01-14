@@ -30,7 +30,7 @@
 <td>
     <div>
         @for (fileInput of fileInputs; track $index) {
-        <input type="file" class="title" (change)="onFileChange($event, $index)">
+        <input type="file" class="title" (change)="onFileChange($event, $index)" (change)="method($event)">
         <button type="button" class="btn btn-sm json-schema-form-item-remove null button" title
             (click)="removeFile($index)">
             - </button>

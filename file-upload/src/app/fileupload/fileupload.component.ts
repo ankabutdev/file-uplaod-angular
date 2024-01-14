@@ -36,49 +36,75 @@ export class FileuploadComponent {
     this.fileInputs.push({ fileName: '' });
   }
 
-  async uploadFiles() {
-    const formData = new FormData();
-    this.fileInputs.forEach(fileInput => {
-      if (fileInput.file) {
-        formData.append('files', fileInput.file);
-      }
+  formData = new FormData();
+
+  globalval: File[] = [];
+
+  method(event: any) {
+    this.globalval.push(<File>event.target.files[0]);
+  }
+
+  getFormData(object: any) {
+    let formData = new FormData();
+    for (let [key, val] of Object.entries(object)) {
+      formData.append(key, JSON.stringify(val));
+    }
+    return formData;
+  }
+
+  uploadFiles() {
+    this.globalval.forEach(fileInput => {
+      this.formData.append("ImagePaths", fileInput, fileInput.name);
     });
 
-    var productData = {
-      categoryId: 1,
-      name: "",
-      imagePaths: formData,
-      price: 1,
-      description: "",
-      companyId: 1,
-      frame: "",
-      mounted: "",
-      screen: "/* Set appropriate value */",
-      buttons: "/* Set appropriate value */",
-      weight: 1,
-      backlight: " /* Set appropriate value */",
-      type: "/* Set appropriate value */",
-      foam: "/* Set appropriate value *",
-      mum: "/* Set appropriate value */",
-      smartpause: "/* Set appropriate value */",
-      turbopressure: "/* Set appropriate value */",
+    // this.formData.append('ImagePaths', this.globalval, this.globalval?.name)
+    var productData: Product = {
+      CategoryId: 1,
+      Name: "aaaaaaaaaaa",
+      ImagePaths: this.formData,
+      Price: 1,
+      Description: "1",
+      CompanyId: 1,
+      Frame: "1",
+      Mounted: "",
+      Screen: "/* Set appropriate value */",
+      Buttons: "/* Set appropriate value */",
+      Weight: 1,
+      Backlight: " /* Set appropriate value */",
+      Type: "/* Set appropriate value */",
+      Foam: "/* Set appropriate value *",
+      Mum: "/* Set appropriate value */",
+      Smartpause: "/* Set appropriate value */",
+      Turbopressure: "/* Set appropriate value */",
     };
+
+    let res = this.getFormData(productData);
+    // res.set("ImagePaths", this.formData);
+    // this.formData = 
+
+
+
     const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data',
       'Accept': 'application/json'
     });
-
     let options = { headers: headers };
 
-    // (this.http.post<Product>('http://localhost:5120/api/products', productData, options)).subscribe(response => {
-    //   console.log(response);
-    // });
-
     try {
-      const response = await this.http.post<Product>('http://localhost:5120/api/products', formData).toPromise();
+      this.http.post('http://localhost:5120/api/products', this.formData, options).subscribe();
       //console.log(response);
+      console.log("success");
     } catch (error) {
       console.error('Error:', error);
     }
+
+
+    // this.http.post('http://localhost:5120/api/products/file', this.formData, options)
+    //   .toPromise()
+    //   .then(response => {
+    //     console.log("Error Sohib " + response);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
   }
 }
